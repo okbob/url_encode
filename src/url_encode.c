@@ -23,9 +23,14 @@ PG_MODULE_MAGIC;
 
 PG_FUNCTION_INFO_V1(url_encode);
 PG_FUNCTION_INFO_V1(url_decode);
+PG_FUNCTION_INFO_V1(uri_encode);
+PG_FUNCTION_INFO_V1(uri_decode);
 
 Datum url_encode(PG_FUNCTION_ARGS);
 Datum url_decode(PG_FUNCTION_ARGS);
+Datum uri_encode(PG_FUNCTION_ARGS);
+Datum uri_decode(PG_FUNCTION_ARGS);
+
 
 static const char *hex_chars = "0123456789ABCDEF";
 
@@ -63,7 +68,7 @@ get_hex(char c)
 Datum
 url_encode(PG_FUNCTION_ARGS)
 {
-	text	   *text_data = PG_GETARG_TEXT_PP(0);
+	text	   *text_data = PG_GETARG_TEXT_P(0);
 	char	   *read_ptr = VARDATA(text_data);
 	int	   len = VARSIZE(text_data) - VARHDRSZ;
 	text		*result;
@@ -75,7 +80,6 @@ url_encode(PG_FUNCTION_ARGS)
 	/* preallocation max 3 times of size */
 	result = (text *) palloc(sizeof(3 * len) + VARHDRSZ);
 	write_ptr = VARDATA(result);
-
 	processed = 0;
 	real_len = 0;
 	while (processed < len)
@@ -125,7 +129,7 @@ url_encode(PG_FUNCTION_ARGS)
 Datum
 url_decode(PG_FUNCTION_ARGS)
 {
-	text	   *text_data = PG_GETARG_TEXT_PP(0);
+	text	   *text_data = PG_GETARG_TEXT_P(0);
 	text	   *result;
 	char		*read_ptr = VARDATA(text_data);
 	char		*write_ptr;
@@ -173,4 +177,16 @@ url_decode(PG_FUNCTION_ARGS)
 	SET_VARSIZE(result, real_len + VARHDRSZ);
 
 	PG_RETURN_TEXT_P(result);
+}
+
+Datum
+uri_encode(PG_FUNCTION_ARGS)
+{
+	PG_RETURN_NULL();
+}
+
+Datum
+uri_decode(PG_FUNCTION_ARGS)
+{
+	PG_RETURN_NULL();
 }
