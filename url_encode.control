@@ -1,0 +1,5 @@
+# url_encode extension
+comment = 'url_encode, url_decode functions'
+default_version = '1.0'
+module_pathname = '$libdir/url_encode'
+relocatable = true
