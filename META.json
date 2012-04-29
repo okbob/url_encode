@@ -4,9 +4,17 @@
    "version": "1.0.0",
    "maintainer": "Pavel Stehule <pavel.stehule@gmail.com>",
    "license": "postgresql",
+   "provides":{
+      "url_encode":{
+        "abstract":"url_enocode, url_decode functions",
+        "version":"1.0.0",
+        "file":"sql/url_encode--1.0.sql",
+        "docfile":"README.md"
+      }
+   },
    "resources": {
       "repository": {
-        "url":  "git@github.com:okbob/url_encode.git",
+        "url":  "https://github.com/okbob/url_encode",
         "web":  "https://github.com/okbob/url_encode/blob/master/README.md",
         "type": "git"
       }
