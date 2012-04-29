@@ -1,0 +1,19 @@
+{
+   "name": "url_encode",
+   "abstract": "A url_encode, url_decode functions",
+   "version": "1.0.0",
+   "maintainer": "Pavel Stehule <pavel.stehule@gmail.com>",
+   "license": "postgresql",
+   "resources": {
+      "repository": {
+        "url":  "git@github.com:okbob/url_encode.git",
+        "web":  "https://github.com/okbob/url_encode/blob/master/README.md",
+        "type": "git"
+      }
+   },
+   "generated_by": "Pavel Stehule",
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "http://pgxn.org/meta/spec.txt"
+   },
+}

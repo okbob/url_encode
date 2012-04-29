@@ -1,0 +1,13 @@
+CREATE EXTENSION url_encode;
+SELECT url_encode('Hello World');
+  url_encode   
+---------------
+ Hello%20World
+(1 row)
+
+SELECT url_decode('Hello%20World');
+ url_decode  
+-------------
+ Hello World
+(1 row)
+
