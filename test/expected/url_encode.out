@@ -11,3 +11,13 @@ SELECT url_decode('Hello%20World');
  Hello World
 (1 row)
 
+SELECT url_encode(unnest) from unnest(string_to_array('http://hu.wikipedia.org/wiki/São_Paulo','/'));
+    url_encode    
+------------------
+ http%3A
+ 
+ hu.wikipedia.org
+ wiki
+ S%C3%A3o_Paulo
+(5 rows)
+

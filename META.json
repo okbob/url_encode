@@ -1,14 +1,14 @@
 {
    "name": "url_encode",
    "abstract": "A url_encode, url_decode functions",
-   "version": "1.0.0",
+   "version": "1.1.0",
    "maintainer": "Pavel Stehule <pavel.stehule@gmail.com>",
    "license": "postgresql",
    "provides":{
       "url_encode":{
         "abstract":"url_enocode, url_decode functions",
-        "version":"1.0.0",
-        "file":"sql/url_encode--1.0.sql",
+        "version":"1.1.0",
+        "file":"sql/url_encode--1.1.sql",
         "docfile":"README.md"
       }
    },
