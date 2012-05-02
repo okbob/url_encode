@@ -1,5 +1,6 @@
 DATA         = $(wildcard sql/*.sql)
 MODULES      = $(patsubst %.c,%,$(wildcard src/*.c))
+EXTENSION    = url_encode
 
 TESTS        = $(wildcard test/sql/*.sql)
 REGRESS      = $(patsubst test/sql/%.sql,%,$(TESTS))

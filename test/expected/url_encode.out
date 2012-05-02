@@ -21,3 +21,15 @@ SELECT url_encode(unnest) from unnest(string_to_array('http://hu.wikipedia.org/w
  S%C3%A3o_Paulo
 (5 rows)
 
+SELECT uri_encode('http://hu.wikipedia.org/wiki/São_Paulo');
+                 uri_encode                  
+---------------------------------------------
+ http://hu.wikipedia.org/wiki/S%C3%A3o_Paulo
+(1 row)
+
+SELECT uri_decode('http://hu.wikipedia.org/wiki/S%C3%A3o_Paulo');
+               uri_decode               
+----------------------------------------
+ http://hu.wikipedia.org/wiki/São_Paulo
+(1 row)
+

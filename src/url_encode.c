@@ -61,21 +61,19 @@ get_hex(char c)
 	return (char) res;
 }
 
-/*
- * encode input string to url encode
- *
- */
-Datum
-url_encode(PG_FUNCTION_ARGS)
+static text *
+encode(text *in_text, const char *unreserved_special)
 {
-	text	   *text_data = PG_GETARG_TEXT_P(0);
-	char	   *read_ptr = VARDATA(text_data);
-	int	   len = VARSIZE(text_data) - VARHDRSZ;
+	int	   len;
 	text		*result;
+	char		*read_ptr;
 	char		*write_ptr;
 	int		real_len;
 	int	processed;
 	int				i;
+
+	len = VARSIZE(in_text) - VARHDRSZ;
+	read_ptr = VARDATA(in_text);
 
 	/* preallocation max 3 times of size */
 	result = (text *) palloc(sizeof(3 * len) + VARHDRSZ);
@@ -92,7 +90,8 @@ url_encode(PG_FUNCTION_ARGS)
 
 			if ((c >='0' && c <= '9') ||
 			    (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-			    (c == '.' || c == '-' || c == '~' || c == '_'))
+			    (strchr(unreserved_special, c) != NULL))
+			    //(c == '.' || c == '-' || c == '~' || c == '_'))
 			{
 				*write_ptr++ = c;
 				real_len += 1;
@@ -119,21 +118,16 @@ url_encode(PG_FUNCTION_ARGS)
 
 	SET_VARSIZE(result, real_len + VARHDRSZ);
 
-	PG_RETURN_TEXT_P(result);
+	return result;
 }
 
-/*
- * decode input string from url encode
- *
- */
-Datum
-url_decode(PG_FUNCTION_ARGS)
+static text *
+decode(text *in_text, const char *unreserved_special)
 {
-	text	   *text_data = PG_GETARG_TEXT_P(0);
 	text	   *result;
-	char		*read_ptr = VARDATA(text_data);
+	char		*read_ptr = VARDATA(in_text);
 	char		*write_ptr;
-	int		len =VARSIZE(text_data) - VARHDRSZ;
+	int		len =VARSIZE(in_text) - VARHDRSZ;
 	int		real_len;
 	int		processed;
 
@@ -151,7 +145,7 @@ url_decode(PG_FUNCTION_ARGS)
 			if ((c >='0' && c <= '9') ||
 			    (c >= 'a' && c <= 'z') ||
 			    (c >= 'A' && c <= 'Z') ||
-			    (c == '.' || c == '-' || c == '~' || c == '_'))
+			    (strchr(unreserved_special, c) != NULL))
 			{
 				*write_ptr++ = c;
 				real_len += 1;
@@ -176,17 +170,38 @@ url_decode(PG_FUNCTION_ARGS)
 
 	SET_VARSIZE(result, real_len + VARHDRSZ);
 
-	PG_RETURN_TEXT_P(result);
+	return result;
+}
+
+
+/*
+ * encode input string to url encode
+ *
+ */
+Datum
+url_encode(PG_FUNCTION_ARGS)
+{
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_"));
+}
+
+/*
+ * decode input string from url encode
+ *
+ */
+Datum
+url_decode(PG_FUNCTION_ARGS)
+{
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_"));
 }
 
 Datum
 uri_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_NULL();
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_/?:@&=+$#"));
 }
 
 Datum
 uri_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_NULL();
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_/?:@&=+$#"));
 }
