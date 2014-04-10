@@ -1,7 +1,7 @@
 {
    "name": "url_encode",
    "abstract": "A url_encode, url_decode functions",
-   "version": "1.2.0",
+   "version": "1.2.1",
    "maintainer": "Pavel Stehule <pavel.stehule@gmail.com>",
    "license": "postgresql",
    "provides":{
