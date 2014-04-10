@@ -76,7 +76,7 @@ encode(text *in_text, const char *unreserved_special)
 	read_ptr = VARDATA(in_text);
 
 	/* preallocation max 3 times of size */
-	result = (text *) palloc(sizeof(3 * len) + VARHDRSZ);
+	result = (text *) palloc(3 * len + VARHDRSZ);
 	write_ptr = VARDATA(result);
 	processed = 0;
 	real_len = 0;
@@ -91,7 +91,6 @@ encode(text *in_text, const char *unreserved_special)
 			if ((c >='0' && c <= '9') ||
 			    (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
 			    (strchr(unreserved_special, c) != NULL))
-			    //(c == '.' || c == '-' || c == '~' || c == '_'))
 			{
 				*write_ptr++ = c;
 				real_len += 1;
@@ -181,7 +180,7 @@ decode(text *in_text, const char *unreserved_special)
 Datum
 url_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_"));
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_PP(0), ".-~_"));
 }
 
 /*
@@ -191,17 +190,17 @@ url_encode(PG_FUNCTION_ARGS)
 Datum
 url_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_"));
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_PP(0), ".-~_"));
 }
 
 Datum
 uri_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_/?:@&=+$#"));
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_PP(0), ".-~_/?:@&=+$#"));
 }
 
 Datum
 uri_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_/?:@&=+$#"));
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_PP(0), ".-~_/?:@&=+$#"));
 }
