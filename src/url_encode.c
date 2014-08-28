@@ -180,7 +180,7 @@ decode(text *in_text, const char *unreserved_special)
 Datum
 url_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_PP(0), ".-~_"));
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_"));
 }
 
 /*
@@ -190,17 +190,17 @@ url_encode(PG_FUNCTION_ARGS)
 Datum
 url_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_PP(0), ".-~_"));
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_"));
 }
 
 Datum
 uri_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_PP(0), ".-~_/?:@&=+$#"));
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_/?:@&=+$#"));
 }
 
 Datum
 uri_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_PP(0), ".-~_/?:@&=+$#"));
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_/?:@&=+$#"));
 }
