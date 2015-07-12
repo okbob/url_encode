@@ -27,9 +27,9 @@ SELECT uri_encode('http://hu.wikipedia.org/wiki/São_Paulo');
  http://hu.wikipedia.org/wiki/S%C3%A3o_Paulo
 (1 row)
 
-SELECT uri_decode('http://hu.wikipedia.org/wiki/S%C3%A3o_Paulo');
-               uri_decode               
-----------------------------------------
- http://hu.wikipedia.org/wiki/São_Paulo
+SELECT md5(uri_decode('http://hu.wikipedia.org/wiki/S%C3%A3o_Paulo'));
+               md5                
+----------------------------------
+ 147ded7d471df9cf050bc13242cbf39e
 (1 row)
 
