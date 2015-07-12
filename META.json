@@ -1,15 +1,23 @@
 {
    "name": "url_encode",
    "abstract": "A url_encode, url_decode functions",
-   "version": "1.2.2",
+   "version": "1.2.3",
    "maintainer": "Pavel Stehule <pavel.stehule@gmail.com>",
    "license": "postgresql",
    "provides":{
       "url_encode":{
         "abstract":"url_enocode, url_decode functions",
-        "version":"1.2.2",
+        "version":"1.2.3",
         "file":"sql/url_encode--1.2.sql",
         "docfile":"README.md"
+      }
+   },
+   "prereqs": {
+      "runtime": {
+         "requires": {
+            "PostgreSQL": "9.1.0",
+            "plpgsql": 0
+        }
       }
    },
    "resources": {
