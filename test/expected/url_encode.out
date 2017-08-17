@@ -33,9 +33,9 @@ SELECT md5(uri_decode('http://hu.wikipedia.org/wiki/S%C3%A3o_Paulo'));
  147ded7d471df9cf050bc13242cbf39e
 (1 row)
 
-SELECT url_decode('%u6D6A%u82B1%u4E00%u6735%u6735%20%u7B2C8%u96C6%20-%20%u89C6%u9891%u5728%u7EBF%u89C2%u770B%20-%20%u6D6A%u82B1%u4E00%u6735%u6735%20-%20%u8292%u679CTV');
-                      url_decode                       
--------------------------------------------------------
- 浪花一朵朵 第8集 - 视频在线观看 - 浪花一朵朵 - 芒果TV
+SELECT md5(url_decode('%u6D6A%u82B1%u4E00%u6735%u6735%20%u7B2C8%u96C6%20-%20%u89C6%u9891%u5728%u7EBF%u89C2%u770B%20-%20%u6D6A%u82B1%u4E00%u6735%u6735%20-%20%u8292%u679CTV'));
+               md5                
+----------------------------------
+ d155b1f894fcd5540ba5881fb71753e1
 (1 row)
 
