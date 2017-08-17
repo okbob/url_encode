@@ -4,7 +4,7 @@
  *	  PostgreSQL functions for url code support
  *
  * Author:	Pavel Stehule
- * Postcardware licence @2017
+ * Postcardware licence @2012-2017
  *
  * IDENTIFICATION
  *	  url_encode/url_encode.c
