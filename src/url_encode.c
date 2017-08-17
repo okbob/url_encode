@@ -188,16 +188,17 @@ decode(text *in_text, const char *unreserved_special)
 				uint16_t c2;
 
 				/* read first two bytes */
-				if (processed + 5 > len)
+				if (processed + 6 > len)
 					elog(ERROR, "incomplete input string");
 
 				b1 = (get_hex(read_ptr[2]) << 4) | get_hex(read_ptr[3]);
 				b2 = (get_hex(read_ptr[4]) << 4) | get_hex(read_ptr[5]);
 				c1 = b2 | (b1 << 8);
 
+				/* is surrogate pairs */
 				if (0xD800 <= c1 && c1 <= 0xDBFF)
 				{
-					if (processed + 9 > len)
+					if (processed + 10 > len)
 						elog(ERROR, "incomplete input string");
 
 					b1 = (get_hex(read_ptr[6]) << 4) | get_hex(read_ptr[7]);
