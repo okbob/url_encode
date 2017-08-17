@@ -193,6 +193,11 @@ decode(text *in_text, const char *unreserved_special)
 
 				b1 = (get_hex(read_ptr[2]) << 4) | get_hex(read_ptr[3]);
 				b2 = (get_hex(read_ptr[4]) << 4) | get_hex(read_ptr[5]);
+
+				/*
+				 * expect input in UTF16-BE (Big Endian) and convert it
+				 * to LE used by Intel.
+				 */
 				c1 = b2 | (b1 << 8);
 
 				/* is surrogate pairs */
