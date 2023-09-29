@@ -4,7 +4,7 @@
  *	  PostgreSQL functions for url code support
  *
  * Author:	Pavel Stehule
- * Postcardware licence @2012-2017
+ * Postcardware licence @2012-2023
  *
  * IDENTIFICATION
  *	  url_encode/url_encode.c
@@ -18,6 +18,11 @@
 #include "mb/pg_wchar.h"
 #include "utils/builtins.h"
 
+#if PG_VERSION_NUM >= 160000
+
+#include "varatt.h"
+
+#endif
 
 PG_MODULE_MAGIC;
 
@@ -64,16 +69,16 @@ get_hex(char c)
 static text *
 encode(text *in_text, const char *unreserved_special)
 {
-	int	   len;
-	text		*result;
-	char		*read_ptr;
-	char		*write_ptr;
-	int		real_len;
-	int	processed;
-	int				i;
+	int			len;
+	text	   *result;
+	char	   *read_ptr;
+	char	   *write_ptr;
+	int			real_len;
+	int			processed;
+	int			i;
 
-	len = VARSIZE(in_text) - VARHDRSZ;
-	read_ptr = VARDATA(in_text);
+	len = VARSIZE_ANY_EXHDR(in_text);
+	read_ptr = VARDATA_ANY(in_text);
 
 	/* preallocation max 3 times of size */
 	result = (text *) palloc(3 * len + VARHDRSZ);
@@ -86,7 +91,7 @@ encode(text *in_text, const char *unreserved_special)
 
 		if (mblen == 1)
 		{
-			char	c = *read_ptr;
+			char			c = *read_ptr;
 
 			if ((c >='0' && c <= '9') ||
 			    (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
@@ -123,7 +128,7 @@ encode(text *in_text, const char *unreserved_special)
 static uint32_t
 decode_utf16_pair(uint16_t c1, uint16_t c2)
 {
-	uint32_t code;
+	uint32_t		code;
 
 	Assert(0xD800 <= c1 && c1 <= 0xDBFF);
 	Assert(0xDC00 <= c2 && c2 <= 0xDFFF);
@@ -138,12 +143,12 @@ decode_utf16_pair(uint16_t c1, uint16_t c2)
 static text *
 decode(text *in_text, const char *unreserved_special)
 {
-	text	   *result;
-	char		*read_ptr = VARDATA(in_text);
+	text	    *result;
+	char		*read_ptr = VARDATA_ANY(in_text);
 	char		*write_ptr;
-	int		len =VARSIZE(in_text) - VARHDRSZ;
-	int		real_len;
-	int		processed;
+	int			len = VARSIZE_ANY_EXHDR(in_text);
+	int			real_len;
+	int			processed;
 
 	real_len = 0;
 
@@ -260,7 +265,7 @@ decode(text *in_text, const char *unreserved_special)
 Datum
 url_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), ".-~_"));
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_PP(0), ".-~_"));
 }
 
 /*
@@ -270,17 +275,17 @@ url_encode(PG_FUNCTION_ARGS)
 Datum
 url_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), ".-~_"));
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_PP(0), ".-~_"));
 }
 
 Datum
 uri_encode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_P(0), "-_.!~*'();/?:@&=+$,#"));
+	PG_RETURN_TEXT_P(encode(PG_GETARG_TEXT_PP(0), "-_.!~*'();/?:@&=+$,#"));
 }
 
 Datum
 uri_decode(PG_FUNCTION_ARGS)
 {
-	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_P(0), "-_.!~*'();/?:@&=+$,#"));
+	PG_RETURN_TEXT_P(decode(PG_GETARG_TEXT_PP(0), "-_.!~*'();/?:@&=+$,#"));
 }
